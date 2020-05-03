@@ -1,0 +1,77 @@
+
+SQL #1 - Tworzenie tabeli, dodawanie i usówanie rekordów---------------------------------------------------------------
+
+
+CREATE TABLE zakupy(
+id INT auto_increment PRIMARY KEY,
+nazwa VARCHAR (50) NOT NULL,
+producent VARCHAR (50),
+opis VARCHAR (200),
+cena INT
+);
+
+INSERT INTO zakupy (nazwa, producent, opis, cena)
+VALUES ('Makaron','Lubella','swiderki',20),
+('Makaron','Lubella','swiderki',20),
+('Makaron','Makaroniera','dobry',15),
+('Narty','Atomic', 'punx', 500),
+('Rower','MTB','szybki','450');
+
+SELECT*FROM zakupy
+WHERE cena > 30;
+SELECT producent FROM zakupy
+WHERE cena BETWEEN 300 AND 470;
+UPDATE zakupy SET cena='240', opis='carving'
+WHERE id=6;
+DELETE FROM zakupy
+WHERE id=3;
+
+
+SQL #2 - Zapytania SELECT----------------------------------------------------------------------------------------------
+
+
+SELECT AVG (cena) FROM zakupy;
+SELECT SUM (cena)FROM zakupy;
+SELECT ROUND(cena,0)FROM zakupy;
+SELECT MAX (cena) FROM zakupy;
+SELECT MIN (cena) FROM zakupy;
+SELECT*FROM zakupy
+WHERE cena>(SELECT AVG (cena) FROM zakupy);
+
+SELECT id,
+nazwa,
+producent,
+opis,
+cena,
+cena > (SELECT AVG(cena) FROM zakupy) AS czy_drozsze_od_sredniej
+FROM zakupy;
+
+
+SQL #3 - Operacje na datach-----------------------------ZADANIE DOMOWE----------------------------------------------
+
+
+ALTER TABLE zakupy
+ADD COLUMN data_zakupu DATETIME;
+
+UPDATE zakupy SET  data_zakupu = '2019-04-03 22:34:23'
+WHERE id = 1;
+UPDATE zakupy SET  data_zakupu = '2020-01-01 12:22:56'
+WHERE id = 4;
+UPDATE zakupy SET  data_zakupu = '2020-04-23 21:09:45'
+WHERE id = 5;
+UPDATE zakupy SET  data_zakupu = '2019-08-04 08:21:17'
+WHERE id = 6;
+UPDATE zakupy SET  data_zakupu = '2019-06-12 13:08:23'
+WHERE id = 7;
+
+SELECT * FROM zakupy
+WHERE EXTRACT(DAY FROM data_zakupu) <= 15;
+
+SELECT * FROM zakupy
+WHERE data_zakupu > DATE_SUB(NOW(),INTERVAL 30 DAY);
+
+SELECT * FROM zakupy
+WHERE HOUR(data_zakupu) > '20:00:00';
+
+SELECT * FROM zakupy
+ORDER BY data_zakupu DESC;
